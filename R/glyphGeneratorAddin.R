@@ -1,6 +1,6 @@
 #' Launch a gui to make glyphs
 #'
-#' @import shiny shinyjs shinythemes shinyWidgets shinydashboard miniUI
+#' @import shiny shinyjs shinythemes shinyWidgets shinydashboard miniUI rstudioapi
 #'
 #' @export
 
