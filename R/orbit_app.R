@@ -1,13 +1,12 @@
-#' Draw an orbital diagram
+#' Draw an orbital diagram///FOR APP
 #'
 #' @param seed_probs probabilities of choosing each shape (none, circle, diamond, square), numeric vector of length 4
 #' @param planet_probs probabilities of how many planet (0, 1, 2, 3), numeric vector of length 4
 #' @param pareto2_prob probabilities of having a second set of pareto rings, numeric vector of length 2
 #'
 #' @return a ggplot of the orbital diagram
-#' @export
 #'
-orbit <- function(seed_probs = c(0.3, 0.5, 0.1, 0.1), planet_probs = c(0.4, 0.3, 0.2, 0.2), pareto2_prob = c(0.2, 0.8)) {
+orbit_app <- function(seed_probs = c(0.3, 0.5, 0.1, 0.1), planet_probs = c(0.4, 0.3, 0.2, 0.2), pareto2_prob = c(0.2, 0.8)) {
   #make seed df
   seed_opts <- c("none", "circle", "diamond", "square")
   seed_probs <- seed_probs
@@ -148,8 +147,7 @@ orbit <- function(seed_probs = c(0.3, 0.5, 0.1, 0.1), planet_probs = c(0.4, 0.3,
          pareto2 = pareto_orbits2
     )
 
-
-  plot <-
+suppressMessages(
     ggplot() +
     geom_polygon(data = final_dat[["seed"]], aes(x = x, y = y, group = id), fill = "white") +
     geom_path(data = final_dat[["seed_outlines"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["seed_outlines"]]$linetype, color = "white") +
@@ -163,8 +161,8 @@ orbit <- function(seed_probs = c(0.3, 0.5, 0.1, 0.1), planet_probs = c(0.4, 0.3,
     theme_void() +
     coord_equal() +
     theme(panel.background = element_rect(fill = "#141414"))
+)
 
-
-  suppressMessages(print(plot))
+  #suppressMessages(print(plot))
 
 }

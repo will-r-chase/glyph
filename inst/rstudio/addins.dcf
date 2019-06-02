@@ -1,0 +1,4 @@
+Name: Glyph generator
+Description: Launches a GUI for the `glyph` package
+Binding: glyphGeneratorAddin
+Interactive: true

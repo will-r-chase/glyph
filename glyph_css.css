@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=B612+Mono&display=swap');
+
+* {
+	font-family: 'B612 Mono', monospace !important;
+}
+.content, .container-fluid {
+	background-color: #000;
+}
+#title {
+	background-color: #FDFDFD;
+	box-sizing: border-box;
+	height: 70px;
+	padding-top: 15px;
+	padding-left: 10px;
+}
+.boxed {
+	background-color: #FDFDFD;
+	box-sizing: border-box;
+	width: 145px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+}

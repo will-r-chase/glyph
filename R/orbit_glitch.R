@@ -1,8 +1,22 @@
-
+#' Generate "glitched" orbital glyphs
+#'
+#' @param seed_probs probabilities of choosing each shape (none, circle,
+#'   diamond, square), numeric vector of length 4
+#' @param glitch_type the type of glitch you want to introduce (options:
+#'   "spike", "connected", "shattered"), character
+#' @param pareto2_prob probabilities of having a second set of pareto rings,
+#'   numeric vector of length 2
+#' @param glitch_params a list of parameters for the glitch options, all
+#'   parameters must be specified, but only ones pertient to the glitch_type
+#'   will be used
+#'
+#' @return a glitched orbital ggplot
+#' @export
+#'
 orbit_glitch <- function(seed_probs = c(1, 0, 0, 0), glitch_type = "spike", pareto2_prob = c(0.2, 0.8),
-                         glitch_params = list(num_glitches = 10, glitch_r_min = 0.5, glitch_r_max = 2,
-                                              min_spikes = 30, max_spikes = 60, min_spikes2 = 15,
-                                              max_spikes2 = 40, min_spike_jitter = -0.2, max_spike_jitter = 0.2)) {
+                             glitch_params = list(num_glitches = 10, glitch_r_min = 0.5, glitch_r_max = 2,
+                                                  min_spikes = 30, max_spikes = 60, min_spikes2 = 15,
+                                                  max_spikes2 = 40, min_spike_jitter = -0.2, max_spike_jitter = 0.2)) {
   #make seed df
   seed_opts <- c("none", "circle", "diamond", "square")
   seed_probs <- seed_probs
@@ -73,85 +87,85 @@ orbit_glitch <- function(seed_probs = c(1, 0, 0, 0), glitch_type = "spike", pare
 
   switch(glitch_type,
          "connected" = {
-            ###connected glitch
-            glitch_seed <- glitch_connected(pareto_orbits, glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
-            glitch_list <- list(glitch_seed)
-            for(i in 2:glitch_params$num_glitches) {
-              glitch_list[[i]] <- glitch_connected(glitch_list[[i - 1]], glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
-            }
-            pareto_glitch <- glitch_list[[glitch_params$num_glitches]]
+           ###connected glitch
+           glitch_seed <- glitch_connected(pareto_orbits, glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
+           glitch_list <- list(glitch_seed)
+           for(i in 2:glitch_params$num_glitches) {
+             glitch_list[[i]] <- glitch_connected(glitch_list[[i - 1]], glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
+           }
+           pareto_glitch <- glitch_list[[glitch_params$num_glitches]]
 
-            if(pareto_2) {
-              glitch_seed_2 <- glitch_connected(pareto_orbits2, glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
-              glitch_list_2 <- list(glitch_seed_2)
-              for(i in 2:glitch_params$num_glitches) {
-                glitch_list_2[[i]] <- glitch_connected(glitch_list_2[[i - 1]], glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
-              }
-              pareto_glitch2 <- glitch_list_2[[glitch_params$num_glitches]]
-            } else {
-              pareto_glitch2 <- pareto_orbits2
-            }
+           if(pareto_2) {
+             glitch_seed_2 <- glitch_connected(pareto_orbits2, glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
+             glitch_list_2 <- list(glitch_seed_2)
+             for(i in 2:glitch_params$num_glitches) {
+               glitch_list_2[[i]] <- glitch_connected(glitch_list_2[[i - 1]], glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
+             }
+             pareto_glitch2 <- glitch_list_2[[glitch_params$num_glitches]]
+           } else {
+             pareto_glitch2 <- pareto_orbits2
+           }
          },
          "shattered" = {
-            ### shattered glitch
-            input <- pareto_orbits %>% mutate(id2 = NA)
-            glitch_seed <- glitch_shattered(input, num = 1, glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
-            glitch_list <- list(glitch_seed)
-            for(i in 2:glitch_params$num_glitches) {
-              glitch_list[[i]] <- glitch_shattered(glitch_list[[i - 1]], num = i, glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
-            }
-            pareto_glitch <- glitch_list[[glitch_params$num_glitches]] %>%
-              mutate(id2 = ifelse(is.na(id2), id, id2),
-                     id_lead = lead(id2),
-                     switch = ifelse(id_lead != id2, paste0("switch_", row_number()), NA))
+           ### shattered glitch
+           input <- pareto_orbits %>% mutate(id2 = NA)
+           glitch_seed <- glitch_shattered(input, num = 1, glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
+           glitch_list <- list(glitch_seed)
+           for(i in 2:glitch_params$num_glitches) {
+             glitch_list[[i]] <- glitch_shattered(glitch_list[[i - 1]], num = i, glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
+           }
+           pareto_glitch <- glitch_list[[glitch_params$num_glitches]] %>%
+             mutate(id2 = ifelse(is.na(id2), id, id2),
+                    id_lead = lead(id2),
+                    switch = ifelse(id_lead != id2, paste0("switch_", row_number()), NA))
 
-            if(is.na(pareto_glitch$switch[1])) {
-              pareto_glitch$switch[1] <- pareto_glitch$id2[1]
-            }
+           if(is.na(pareto_glitch$switch[1])) {
+             pareto_glitch$switch[1] <- pareto_glitch$id2[1]
+           }
 
-            pareto_glitch$switch2 <- zoo::na.locf(pareto_glitch$switch)
+           pareto_glitch$switch2 <- zoo::na.locf(pareto_glitch$switch)
 
-            switch3 <- c(pareto_glitch$switch2[1], pareto_glitch$switch2)
-            switch3 <- switch3[1:nrow(pareto_glitch)]
-            pareto_glitch$id <- switch3
+           switch3 <- c(pareto_glitch$switch2[1], pareto_glitch$switch2)
+           switch3 <- switch3[1:nrow(pareto_glitch)]
+           pareto_glitch$id <- switch3
 
-            if(pareto_2) {
-              input2 <- pareto_orbits2 %>% mutate(id2 = NA)
-              glitch_seed2 <- glitch_shattered(input2, num = 1, glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
-              glitch_list2 <- list(glitch_seed2)
-              for(i in 2:glitch_params$num_glitches) {
-                glitch_list2[[i]] <- glitch_shattered(glitch_list2[[i - 1]], num = i, glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
-              }
-              pareto_glitch2 <- glitch_list2[[glitch_params$num_glitches]] %>%
-                mutate(id2 = ifelse(is.na(id2), id, id2),
-                       id_lead = lead(id2),
-                       switch = ifelse(id_lead != id2, paste0("switch_", row_number()), NA))
+           if(pareto_2) {
+             input2 <- pareto_orbits2 %>% mutate(id2 = NA)
+             glitch_seed2 <- glitch_shattered(input2, num = 1, glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
+             glitch_list2 <- list(glitch_seed2)
+             for(i in 2:glitch_params$num_glitches) {
+               glitch_list2[[i]] <- glitch_shattered(glitch_list2[[i - 1]], num = i, glitch_r_min = glitch_params$glitch_r_min, glitch_r_max = glitch_params$glitch_r_max)
+             }
+             pareto_glitch2 <- glitch_list2[[glitch_params$num_glitches]] %>%
+               mutate(id2 = ifelse(is.na(id2), id, id2),
+                      id_lead = lead(id2),
+                      switch = ifelse(id_lead != id2, paste0("switch_", row_number()), NA))
 
-              if(is.na(pareto_glitch2$switch[1])) {
-                pareto_glitch2$switch[1] <- pareto_glitch2$id2[1]
-              }
+             if(is.na(pareto_glitch2$switch[1])) {
+               pareto_glitch2$switch[1] <- pareto_glitch2$id2[1]
+             }
 
-              pareto_glitch2$switch2 <- zoo::na.locf(pareto_glitch2$switch)
+             pareto_glitch2$switch2 <- zoo::na.locf(pareto_glitch2$switch)
 
-              switch3_2 <- c(pareto_glitch2$switch2[1], pareto_glitch2$switch2)
-              switch3_2 <- switch3_2[1:nrow(pareto_glitch2)]
-              pareto_glitch2$id <- switch3_2
-            } else {
-              pareto_glitch2 <- pareto_orbits2
-            }
+             switch3_2 <- c(pareto_glitch2$switch2[1], pareto_glitch2$switch2)
+             switch3_2 <- switch3_2[1:nrow(pareto_glitch2)]
+             pareto_glitch2$id <- switch3_2
+           } else {
+             pareto_glitch2 <- pareto_orbits2
+           }
          },
          "spike" = {
-            ##spike glitch
-            pareto_glitch <- glitch_spike(input = pareto_orbits, min_spikes = glitch_params$min_spikes, max_spikes = glitch_params$max_spikes,
-                                          min_spike_r = glitch_params$glitch_r_min, max_spike_r = glitch_params$glitch_r_max,
-                                          min_spike_jitter = glitch_params$min_spike_jitter, max_spike_jitter = glitch_params$max_spike_jitter)
-            if(pareto_2) {
-              pareto_glitch2 <- glitch_spike(input = pareto_orbits2, min_spikes = glitch_params$min_spikes2, max_spikes = glitch_params$max_spikes2,
-                                             min_spike_r = glitch_params$glitch_r_min, max_spike_r = glitch_params$glitch_r_max,
-                                             min_spike_jitter = glitch_params$min_spike_jitter, max_spike_jitter = glitch_params$max_spike_jitter)
-            } else {
-              pareto_glitch2 <- pareto_orbits2
-            }
+           ##spike glitch
+           pareto_glitch <- glitch_spike(input = pareto_orbits, min_spikes = glitch_params$min_spikes, max_spikes = glitch_params$max_spikes,
+                                         min_spike_r = glitch_params$glitch_r_min, max_spike_r = glitch_params$glitch_r_max,
+                                         min_spike_jitter = glitch_params$min_spike_jitter, max_spike_jitter = glitch_params$max_spike_jitter)
+           if(pareto_2) {
+             pareto_glitch2 <- glitch_spike(input = pareto_orbits2, min_spikes = glitch_params$min_spikes2, max_spikes = glitch_params$max_spikes2,
+                                            min_spike_r = glitch_params$glitch_r_min, max_spike_r = glitch_params$glitch_r_max,
+                                            min_spike_jitter = glitch_params$min_spike_jitter, max_spike_jitter = glitch_params$max_spike_jitter)
+           } else {
+             pareto_glitch2 <- pareto_orbits2
+           }
          }
   )
   #put it all in a list and plot
@@ -176,13 +190,8 @@ orbit_glitch <- function(seed_probs = c(1, 0, 0, 0), glitch_type = "spike", pare
     coord_equal() +
     theme(panel.background = element_rect(fill = "#141414"))
 
+
   suppressMessages(print(plot))
 
 }
-
-orbit_glitch(glitch_type = "spike", glitch_params = list(num_glitches = 15, glitch_r_min = 0.5, glitch_r_max = 2,
-                                                             min_spikes = 30, max_spikes = 60, min_spikes2 = 15,
-                                                             max_spikes2 = 40, min_spike_jitter = -0.6, max_spike_jitter = 0.6))
-
-ggsave("glitch_spike3.png")
 

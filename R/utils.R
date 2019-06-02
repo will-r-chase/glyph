@@ -4,8 +4,8 @@
 #' @param seed_r seed radius, numeric
 #'
 #' @return a data frame with x and y positions of the seed polygon
-#' @import tibble
-#'
+#' @import dplyr tibble purrr tidyr zoo EnvStats ggplot2 rap
+#' @importFrom stats runif
 #' @export
 #'
 makedf_seed <- function(seed_shape, seed_r) {
@@ -34,7 +34,6 @@ makedf_seed <- function(seed_shape, seed_r) {
 #' @param width the width of the line, numeric
 #'
 #' @return a dataframe with x and y positions and associated parameters
-#' @import tibble
 #' @export
 #'
 makedf_line <- function(shape, r, line, width) {
@@ -68,7 +67,6 @@ makedf_line <- function(shape, r, line, width) {
 #' @param size the size of the planets, numeric
 #'
 #' @return a dataframe with x and y positions and point size
-#' @import tibble
 #' @export
 #'
 makedf_inscribed_planets <- function(shape, r, size) {
@@ -104,7 +102,6 @@ makedf_inscribed_planets <- function(shape, r, size) {
 #' @param width the width of the outlines, numeric
 #'
 #' @return a dataframe with x and y positions and associated parameters
-#' @import tibble, tidyr, dplyr, purrr
 #' @export
 #'
 makedf_outlines <- function(nlines, r, shapes, linetype, width) {
@@ -192,8 +189,16 @@ calc_inscribed_r <- function(shape1, shape2, r1) {
   return(r)
 }
 
+#' Title
+#'
+#' @param input
+#' @param glitch_r_min
+#' @param glitch_r_max
+#'
+#' @return
+
 glitch_connected <- function(input, glitch_r_min = 0.5, glitch_r_max = 2)  {
-  glitch_init <- sample(min(pareto_orbits$angle):max(pareto_orbits$angle), 1)
+  glitch_init <- sample(min(input$angle):max(input$angle), 1)
   glitch_bump <- abs(glitch_init + sample(seq(-1.5, 1.5, by = 0.05), 1))
 
   glitch_start <- min(glitch_init, glitch_bump)
@@ -210,8 +215,17 @@ glitch_connected <- function(input, glitch_r_min = 0.5, glitch_r_max = 2)  {
     select(id, angle, x = x_new, y = y_new, r = r_new, linetype = linetype.y, linewidth = linewidth.y)
 }
 
+#' Title
+#'
+#' @param input
+#' @param num
+#' @param glitch_r_min
+#' @param glitch_r_max
+#'
+#' @return
+
 glitch_shattered <- function(input, num, glitch_r_min = 0.5, glitch_r_max = 2)  {
-  glitch_init <- sample(min(pareto_orbits$angle):max(pareto_orbits$angle), 1)
+  glitch_init <- sample(min(input$angle):max(input$angle), 1)
   glitch_bump <- abs(glitch_init + sample(seq(-1.5, 1.5, by = 0.05), 1))
 
   glitch_start <- min(glitch_init, glitch_bump)
@@ -229,6 +243,18 @@ glitch_shattered <- function(input, num, glitch_r_min = 0.5, glitch_r_max = 2)  
     select(id, id2 = id2_new, angle, x = x_new, y = y_new, r = r_new, linetype = linetype.y, linewidth = linewidth.y)
 }
 
+#' Title
+#'
+#' @param input
+#' @param min_spikes
+#' @param max_spikes
+#' @param min_spike_r
+#' @param max_spike_r
+#' @param min_spike_jitter
+#' @param max_spike_jitter
+#'
+#' @return
+#'
 glitch_spike <- function(input, min_spikes = 30, max_spikes = 60, min_spike_r = 0.5, max_spike_r = 2, min_spike_jitter = -0.2, max_spike_jitter = 0.2) {
   num_spikes <- sample(min_spikes:max_spikes, 1)
   r_bump <- sample(seq(min_spike_r, max_spike_r, by = 0.01), num_spikes, replace = TRUE)
