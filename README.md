@@ -3,13 +3,14 @@
 
 `glyph` is a package for making generative art. It contains functions to
 produce various styles of “glyphs”, as described in these
-<a href="" target="_blank">blog</a>
-<a href="" target="_blank">posts</a>. To understand better, see the
-examples or [instructions](instructions/glyph_instructions.md). The
-package can be used by calling the main functions (`orbit()`,
-`summon()`, `orbit_glitch()`), or by using the Rstudio addin to launch a
-graphical user interface where you can adjust parameters, generate
-glyphs, and download the images.
+<a href="https://www.williamrchase.com/post/orbital-glyphs-part-1-12-months-of-art-april/" target="_blank">blog</a>
+<a href="https://www.williamrchase.com/post/orbital-glyphs-part-2-12-months-of-art-may/" target="_blank">posts</a>.
+To understand better, see the examples or
+[instructions](instructions/glyph_instructions.md). The package can be
+used by calling the main functions (`orbit()`, `summon()`,
+`orbit_glitch()`), or by using the Rstudio addin to launch a graphical
+user interface where you can adjust parameters, generate glyphs, and
+download the images.
 
 ## Installation
 
