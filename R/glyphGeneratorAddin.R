@@ -12,18 +12,18 @@ glyphGeneratorAddin <- function() {
       removeUI(selector = id)
     }
   }
-  path <- system.file("www/glyph_instructions.html", package="glyph")
+  css_path <- system.file("css/glyph_css.css",package="glyph")
   ui <- dashboardBody(theme = shinytheme("flatly"),
                       h1(id="title", "Glyph generator"),
                       dashboardSidebar(disable = TRUE),
                       setBackgroundColor(color = "black"),
                       useShinydashboard(),
                       useShinyjs(),
-                      includeCSS("glyph_css.css"),
+                      includeCSS(css_path),
                       fluidRow(
                         column(3,
                                box(title = "What do all these parameters mean???", width = NULL,
-                                   div("Read the", a(href = "https://www.williamrchase.com/", "description of parameters", target = "_blank"))),
+                                   div("Read the", a(href = "https://github.com/will-r-chase/glyph/blob/master/instructions/glyph_instructions.md", "description of parameters", target = "_blank"))),
                                box(title = "Type of glyph to generate", id = "glyph_choice", width = NULL,
                                    div(id = "glyph_type",
                                        selectInput("input_type", label = NA,
@@ -95,7 +95,7 @@ glyphGeneratorAddin <- function() {
         shinyjs::hide(id = "glitch_box", anim = TRUE)
         shinyjs::hide(id = "more_inscribed", anim = TRUE)
         shinyjs::hide(id = "num_inscribed", anim = TRUE)
-        shinyjs::hide(id = "planet_prob", anim = TRUE)
+        shinyjs::show(id = "planet_prob", anim = TRUE)
         shinyjs::hide(id = "sec_pareto_glitch", anim = TRUE)
         shinyjs::show(id = "sec_pareto", anim = TRUE)
         insertUI(

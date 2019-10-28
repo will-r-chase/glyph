@@ -16,7 +16,8 @@
 orbit_glitch <- function(seed_probs = c(1, 0, 0, 0), glitch_type = "spike", pareto2_prob = c(0.2, 0.8),
                              glitch_params = list(num_glitches = 10, glitch_r_min = 0.5, glitch_r_max = 2,
                                                   min_spikes = 30, max_spikes = 60, min_spikes2 = 15,
-                                                  max_spikes2 = 40, min_spike_jitter = -0.2, max_spike_jitter = 0.2)) {
+                                                  max_spikes2 = 40, min_spike_jitter = -0.2, max_spike_jitter = 0.2),
+                         bg = "#141414", col = "white") {
   #make seed df
   seed_opts <- c("none", "circle", "diamond", "square")
   seed_probs <- seed_probs
@@ -179,19 +180,20 @@ orbit_glitch <- function(seed_probs = c(1, 0, 0, 0), glitch_type = "spike", pare
 
   plot <-
     ggplot() +
-    geom_polygon(data = final_dat[["seed"]], aes(x = x, y = y, group = id), fill = "white") +
-    geom_path(data = final_dat[["seed_outlines"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["seed_outlines"]]$linetype, color = "white") +
-    geom_path(data = final_dat[["pareto1"]], aes(x = x, y = y, group = id, size = linewidth), linetype = final_dat[["pareto1"]]$linetype, color = "white") +
-    geom_path(data = final_dat[["pareto2"]], aes(x = x, y = y, group = id, size = linewidth), linetype = final_dat[["pareto2"]]$linetype, color = "white") +
-    geom_path(data = final_dat[["orbits"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["orbits"]]$linetype, color = "white") +
+    geom_polygon(data = final_dat[["seed"]], aes(x = x, y = y, group = id), fill = col) +
+    geom_path(data = final_dat[["seed_outlines"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["seed_outlines"]]$linetype, color = col) +
+    geom_path(data = final_dat[["pareto1"]], aes(x = x, y = y, group = id, size = linewidth), linetype = final_dat[["pareto1"]]$linetype, color = col) +
+    geom_path(data = final_dat[["pareto2"]], aes(x = x, y = y, group = id, size = linewidth), linetype = final_dat[["pareto2"]]$linetype, color = col) +
+    geom_path(data = final_dat[["orbits"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["orbits"]]$linetype, color = col) +
     scale_size_identity() +
     scale_color_identity() +
     theme_void() +
     coord_equal() +
-    theme(panel.background = element_rect(fill = "#141414"))
+    theme(panel.background = element_rect(fill = bg), plot.background = element_rect(color = NA, fill = bg))
 
 
   suppressMessages(print(plot))
+  return(final_dat)
 
 }
 

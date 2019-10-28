@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-summon <- function(seed_probs = c(0.3, 0.5, 0.1, 0.1), inscribed_probs = c(0.2, 0.3, 0.3, 0.2), sec_shape_probs = c(0.4, 0.6), third_shape_probs = c(0.5, 0.5)) {
+summon <- function(seed_probs = c(0.3, 0.5, 0.1, 0.1), inscribed_probs = c(0.2, 0.3, 0.3, 0.2), sec_shape_probs = c(0.4, 0.6), third_shape_probs = c(0.5, 0.5), bg = "#141414", col = "white") {
   #make seed df
   seed_opts <- c("none", "circle", "diamond", "square")
   seed_probs <- seed_probs
@@ -175,19 +175,20 @@ summon <- function(seed_probs = c(0.3, 0.5, 0.1, 0.1), inscribed_probs = c(0.2, 
 
   plot <-
     ggplot() +
-    geom_polygon(data = final_dat[["seed"]], aes(x = x, y = y, group = id), fill = "white") +
-    geom_path(data = final_dat[["seed_outlines"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["seed_outlines"]]$linetype, color = "white") +
-    geom_path(data = final_dat[["orbits"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["orbits"]]$linetype, color = "white") +
-    geom_path(data = final_dat[["inscribed"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["inscribed"]]$linetype, color = "white") +
-    geom_path(data = final_dat[["sec"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["sec"]]$linetype, color = "white") +
-    geom_path(data = final_dat[["third"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["third"]]$linetype, color = "white") +
+    geom_polygon(data = final_dat[["seed"]], aes(x = x, y = y, group = id), fill = col) +
+    geom_path(data = final_dat[["seed_outlines"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["seed_outlines"]]$linetype, color = col) +
+    geom_path(data = final_dat[["orbits"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["orbits"]]$linetype, color = col) +
+    geom_path(data = final_dat[["inscribed"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["inscribed"]]$linetype, color = col) +
+    geom_path(data = final_dat[["sec"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["sec"]]$linetype, color = col) +
+    geom_path(data = final_dat[["third"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["third"]]$linetype, color = col) +
     geom_point(data = final_dat[["inscribed_planets"]], aes(x = x, y = y, size = size, color = color)) +
     scale_size_identity() +
     scale_color_identity() +
     theme_void() +
     coord_equal() +
-    theme(panel.background = element_rect(fill = "#141414"))
+    theme(panel.background = element_rect(fill = bg), plot.background = element_rect(color = NA, fill = bg))
 
 
   suppressMessages(print(plot))
+  return(final_dat)
 }

@@ -7,7 +7,7 @@
 #' @return a ggplot of the orbital diagram
 #' @export
 #'
-orbit <- function(seed_probs = c(0.3, 0.5, 0.1, 0.1), planet_probs = c(0.4, 0.3, 0.2, 0.2), pareto2_prob = c(0.2, 0.8)) {
+orbit <- function(seed_probs = c(0.3, 0.5, 0.1, 0.1), planet_probs = c(0.4, 0.3, 0.2, 0.2), pareto2_prob = c(0.2, 0.8), bg = "#141414", col = "white") {
   #make seed df
   seed_opts <- c("none", "circle", "diamond", "square")
   seed_probs <- seed_probs
@@ -151,20 +151,21 @@ orbit <- function(seed_probs = c(0.3, 0.5, 0.1, 0.1), planet_probs = c(0.4, 0.3,
 
   plot <-
     ggplot() +
-    geom_polygon(data = final_dat[["seed"]], aes(x = x, y = y, group = id), fill = "white") +
-    geom_path(data = final_dat[["seed_outlines"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["seed_outlines"]]$linetype, color = "white") +
-    geom_path(data = final_dat[["pareto1"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["pareto1"]]$linetype, color = "white") +
-    geom_path(data = final_dat[["pareto2"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["pareto2"]]$linetype, color = "white") +
-    geom_path(data = final_dat[["orbits"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["orbits"]]$linetype, color = "white") +
-    geom_polygon(data = final_dat[["planets"]], aes(x = x, y = y, group = id), fill = "white") +
-    geom_path(data = final_dat[["planet_orbits"]], aes (x = x, y = y, group = id, size = linesize), color = "white", size = 0.13) +
+    geom_polygon(data = final_dat[["seed"]], aes(x = x, y = y, group = id), fill = col) +
+    geom_path(data = final_dat[["seed_outlines"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["seed_outlines"]]$linetype, color = col) +
+    geom_path(data = final_dat[["pareto1"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["pareto1"]]$linetype, color = col) +
+    geom_path(data = final_dat[["pareto2"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["pareto2"]]$linetype, color = col) +
+    geom_path(data = final_dat[["orbits"]], aes(x = x, y = y, group = parent, size = linewidth), linetype = final_dat[["orbits"]]$linetype, color = col) +
+    geom_polygon(data = final_dat[["planets"]], aes(x = x, y = y, group = id), fill = col) +
+    geom_path(data = final_dat[["planet_orbits"]], aes (x = x, y = y, group = id, size = linesize), color = col, size = 0.13) +
     scale_size_identity() +
     scale_color_identity() +
     theme_void() +
     coord_equal() +
-    theme(panel.background = element_rect(fill = "#141414"))
+    theme(panel.background = element_rect(fill = bg), plot.background = element_rect(color = NA, fill = bg))
 
 
   suppressMessages(print(plot))
 
+  return(final_dat)
 }
